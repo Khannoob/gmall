@@ -1,0 +1,38 @@
+{
+  "groups": [
+    {
+      "name": "dynamic",
+      "type": "edu.sysu.datasource.properties.DynamicDataSourceProperties",
+      "sourceType": "edu.sysu.datasource.properties.DynamicDataSourceProperties"
+    },
+    {
+      "name": "guli.jwt",
+      "type": "edu.sysu.modules.app.utils.JwtUtils",
+      "sourceType": "edu.sysu.modules.app.utils.JwtUtils"
+    }
+  ],
+  "properties": [
+    {
+      "name": "dynamic.datasource",
+      "type": "java.util.Map<java.lang.String,edu.sysu.datasource.properties.DataSourceProperties>",
+      "sourceType": "edu.sysu.datasource.properties.DynamicDataSourceProperties"
+    },
+    {
+      "name": "guli.jwt.expire",
+      "type": "java.lang.Long",
+      "sourceType": "edu.sysu.modules.app.utils.JwtUtils",
+      "defaultValue": 0
+    },
+    {
+      "name": "guli.jwt.header",
+      "type": "java.lang.String",
+      "sourceType": "edu.sysu.modules.app.utils.JwtUtils"
+    },
+    {
+      "name": "guli.jwt.secret",
+      "type": "java.lang.String",
+      "sourceType": "edu.sysu.modules.app.utils.JwtUtils"
+    }
+  ],
+  "hints": []
+}
