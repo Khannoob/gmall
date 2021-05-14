@@ -1,23 +1,21 @@
-package edu.sysu.gmall.pms.service;
+package edu.sysu.gmall.wms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import edu.sysu.gmall.common.bean.PageResultVo;
 import edu.sysu.gmall.common.bean.PageParamVo;
-import edu.sysu.gmall.pms.entity.SpuEntity;
+import edu.sysu.gmall.wms.entity.PurchaseEntity;
 
 import java.util.Map;
 
 /**
- * spu信息
+ * 采购信息
  *
  * @author Khan
  * @email khannoob@outlook.com
- * @date 2021-05-13 13:08:59
+ * @date 2021-05-14 19:41:47
  */
-public interface SpuService extends IService<SpuEntity> {
+public interface PurchaseService extends IService<PurchaseEntity> {
 
     PageResultVo queryPage(PageParamVo paramVo);
-
-    PageResultVo queryPageByCid(Long categoryId, PageParamVo paramVo);
 }
 

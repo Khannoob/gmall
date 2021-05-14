@@ -2,6 +2,7 @@ package edu.sysu.gmall.pms.controller;
 
 import java.util.List;
 
+import edu.sysu.gmall.pms.entity.AttrEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,19 @@ public class AttrGroupController {
 
     @Autowired
     private AttrGroupService attrGroupService;
+
+    @GetMapping("withattrs/{catId}")
+    public ResponseVo<List<AttrGroupEntity>> queryAttrGroupAndAttrByCid(@PathVariable String catId){
+        List<AttrGroupEntity> attrGroupEntities = attrGroupService.queryAttrGroupAndAttrByCid(catId);
+        return ResponseVo.ok(attrGroupEntities);
+    }
+
+
+    @GetMapping("category/{cid}")
+    public ResponseVo<List<AttrGroupEntity>> queryAttrGroupByCid(@PathVariable Long cid){
+        List<AttrGroupEntity> attrGroupEntities = attrGroupService.queryAttrGroupByCid(cid);
+        return ResponseVo.ok(attrGroupEntities);
+    }
 
     /**
      * 列表

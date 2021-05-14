@@ -5,6 +5,7 @@ import edu.sysu.gmall.common.bean.PageResultVo;
 import edu.sysu.gmall.common.bean.PageParamVo;
 import edu.sysu.gmall.pms.entity.AttrEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,5 +18,9 @@ import java.util.Map;
 public interface AttrService extends IService<AttrEntity> {
 
     PageResultVo queryPage(PageParamVo paramVo);
+
+    List<AttrEntity> queryAttrByGid(Long gid);
+
+    List<AttrEntity> querySkuAttrByCidOrTypeOrSearchType(Long cid, Integer type, Integer searchType);
 }
 

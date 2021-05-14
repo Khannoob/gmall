@@ -1,5 +1,7 @@
 package edu.sysu.gmall.pms.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -25,5 +27,21 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
 
         return new PageResultVo(page);
     }
+
+    @Override
+    public PageResultVo queryPageByCid(Long categoryId, PageParamVo paramVo) {
+        LambdaQueryWrapper<SpuEntity> queryWrapper = new LambdaQueryWrapper<>();
+        if (0!=categoryId)
+        queryWrapper.eq(SpuEntity::getCategoryId,categoryId);
+
+        String key = paramVo.getKey();
+        if (StringUtils.isNotBlank(key))
+            queryWrapper.and(t -> t.eq(SpuEntity::getId,key).or().like(SpuEntity::getName,key));
+
+        IPage<SpuEntity> page = this.page(paramVo.getPage(), queryWrapper);
+
+        return new PageResultVo(page);
+    }
+
 
 }

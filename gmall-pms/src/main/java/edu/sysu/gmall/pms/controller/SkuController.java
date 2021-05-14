@@ -34,6 +34,12 @@ public class SkuController {
     @Autowired
     private SkuService skuService;
 
+    @GetMapping("spu/{spuId}")
+    public ResponseVo<List<SkuEntity>> querySkusBySpu(@PathVariable String spuId){
+        List<SkuEntity> skuEntities = skuService.querySkusBySpu(spuId);
+        return ResponseVo.ok(skuEntities);
+    }
+
     /**
      * 列表
      */

@@ -34,6 +34,22 @@ public class AttrController {
     @Autowired
     private AttrService attrService;
 
+    @GetMapping("category/{cid}")
+    public ResponseVo<List<AttrEntity>> querySkuAttrByCidOrTypeOrSearchType(
+            @PathVariable Long cid,
+            @RequestParam(value = "type",required = false) Integer type,
+            @RequestParam(value = "searchType",required = false) Integer searchType
+    ){
+        List<AttrEntity> attrEntities = attrService.querySkuAttrByCidOrTypeOrSearchType(cid,type,searchType);
+        return ResponseVo.ok(attrEntities);
+    }
+
+    @GetMapping("group/{gid}")
+    public ResponseVo<List<AttrEntity>> queryAttrByGid(@PathVariable Long gid){
+        List<AttrEntity> attrEntities = attrService.queryAttrByGid(gid);
+        return ResponseVo.ok(attrEntities);
+    }
+
     /**
      * 列表
      */

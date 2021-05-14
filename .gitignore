@@ -1,11 +1,14 @@
 .idea/
 *.iml
+gmall-admin/
+gmall-generator/
 # Compiled class file
 *.class
 
 # Config
 *.yml
 *.properties
+rebel.xml
 
 # Log file
 *.log

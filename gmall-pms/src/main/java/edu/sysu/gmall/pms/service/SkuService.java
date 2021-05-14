@@ -5,6 +5,7 @@ import edu.sysu.gmall.common.bean.PageResultVo;
 import edu.sysu.gmall.common.bean.PageParamVo;
 import edu.sysu.gmall.pms.entity.SkuEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,5 +18,7 @@ import java.util.Map;
 public interface SkuService extends IService<SkuEntity> {
 
     PageResultVo queryPage(PageParamVo paramVo);
+
+    List<SkuEntity> querySkusBySpu(String spuId);
 }
 
