@@ -10,7 +10,6 @@ package edu.sysu.generator.config;
 
 import edu.sysu.generator.dao.*;
 import edu.sysu.generator.utils.RRException;
-import edu.sysu.generator.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
