@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import edu.sysu.gmall.common.bean.PageResultVo;
 import edu.sysu.gmall.common.bean.PageParamVo;
 import edu.sysu.gmall.pms.entity.SpuEntity;
+import edu.sysu.gmall.pms.vo.SpuVo;
 
 import java.util.Map;
 
@@ -19,5 +20,7 @@ public interface SpuService extends IService<SpuEntity> {
     PageResultVo queryPage(PageParamVo paramVo);
 
     PageResultVo queryPageByCid(Long categoryId, PageParamVo paramVo);
+
+    void bigSave(SpuVo spuVo);
 }
 

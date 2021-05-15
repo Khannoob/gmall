@@ -5,8 +5,6 @@ import edu.sysu.gmall.common.bean.PageResultVo;
 import edu.sysu.gmall.common.bean.PageParamVo;
 import edu.sysu.gmall.pms.entity.SpuAttrValueEntity;
 
-import java.util.Map;
-
 /**
  * spu属性值
  *

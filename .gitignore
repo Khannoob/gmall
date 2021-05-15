@@ -1,7 +1,7 @@
 .idea/
 *.iml
-gmall-admin/
-gmall-generator/
+*/gmall-admin/edu/
+*/gmall-generator/
 # Compiled class file
 *.class
 
