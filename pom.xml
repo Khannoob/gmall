@@ -26,6 +26,7 @@
         <module>gmall-sms</module>
         <module>gmall-gateway</module>
         <module>gmall-generator</module>
+        <module>gmall-sms-interface</module>
 
 
     </modules>

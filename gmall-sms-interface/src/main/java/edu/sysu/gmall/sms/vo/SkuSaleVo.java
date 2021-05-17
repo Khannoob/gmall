@@ -1,7 +1,5 @@
-package edu.sysu.gmall.pms.vo;
+package edu.sysu.gmall.sms.vo;
 
-import edu.sysu.gmall.pms.entity.SkuAttrValueEntity;
-import edu.sysu.gmall.pms.entity.SkuEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -10,12 +8,11 @@ import java.util.List;
 /**
  * @program: gmall
  * @author: Khan
- * @create: 2021-05-15 10:18
+ * @create: 2021-05-16 23:03
  */
 @Data
-public class SkuVo extends SkuEntity {
-    private List<String> images;
-    private List<SkuAttrValueEntity> saleAttrs;
+public class SkuSaleVo {
+    private Long skuId;
     //优惠券信息
     private BigDecimal growBounds;
     private BigDecimal buyBounds;
