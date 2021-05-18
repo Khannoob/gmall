@@ -21,6 +21,7 @@ import edu.sysu.gmall.common.bean.PageParamVo;
 import edu.sysu.gmall.sms.mapper.SkuBoundsMapper;
 import edu.sysu.gmall.sms.entity.SkuBoundsEntity;
 import edu.sysu.gmall.sms.service.SkuBoundsService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("skuBoundsService")
@@ -39,6 +40,7 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
     private SkuFullReductionService skuFullReductionService;
     @Autowired
     private SkuLadderService skuLadderService;
+    @Transactional
     @Override
     public void bigSave(SkuSaleVo skuSaleVo) {
         //3.1 保存sms_sku_bounds表

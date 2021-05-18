@@ -11,6 +11,7 @@ import edu.sysu.gmall.pms.vo.SpuAttrVo;
 import edu.sysu.gmall.pms.vo.SpuVo;
 import edu.sysu.gmall.sms.api.SmsFeignClient;
 import edu.sysu.gmall.sms.vo.SkuSaleVo;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import edu.sysu.gmall.common.bean.PageResultVo;
 import edu.sysu.gmall.common.bean.PageParamVo;
 
 import edu.sysu.gmall.pms.mapper.SpuMapper;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 
@@ -72,6 +74,8 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     @Autowired
     private SmsFeignClientApi smsFeignClientApi;
 
+    @GlobalTransactional(rollbackFor = Exception.class)
+//    @Transactional(rollbackFor = Exception.class)
     @Override
     public void bigSave(SpuVo spuVo) {
         //1.保存spu相关信息
@@ -83,11 +87,15 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
 
         //1.3 保存pms_spu_attr_value表
         saveSpuAttrEntity(spuVo, spuId);
+        //2.保存sku相关信息
+        saveSKuVo(spuVo, spuId);
+    }
 
+    private void saveSKuVo(SpuVo spuVo, Long spuId) {
         List<SkuVo> skus = spuVo.getSkus();
         if (!CollectionUtils.isEmpty(skus)){
             skus.forEach(skuVo->{
-                //2.保存sku相关信息
+
                 //2.1 保存pms_sku表
                 skuVo.setSpuId(spuId);
                 List<String> images = skuVo.getImages();
