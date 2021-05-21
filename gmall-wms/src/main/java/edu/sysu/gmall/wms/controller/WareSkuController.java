@@ -37,7 +37,7 @@ public class WareSkuController {
     private WareSkuService wareSkuService;
 
     @GetMapping("sku/{skuId}")
-    public ResponseVo<List<WareSkuEntity>> queryWareSkuBySid(@PathVariable String skuId){
+    public ResponseVo<List<WareSkuEntity>> queryWareSkuBySid(@PathVariable Long skuId){
         List<WareSkuEntity> wareSkuEntities = wareSkuService.
                 list(new LambdaQueryWrapper<WareSkuEntity>().eq(WareSkuEntity::getSkuId,skuId));
         return ResponseVo.ok(wareSkuEntities);

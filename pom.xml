@@ -27,8 +27,9 @@
         <module>gmall-gateway</module>
         <module>gmall-generator</module>
         <module>gmall-sms-interface</module>
-
-
+        <module>gmall-pms-interface</module>
+        <module>gmall-search</module>
+        <module>gmall-wms-interface</module>
     </modules>
 
     <properties>

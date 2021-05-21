@@ -5,6 +5,8 @@ import edu.sysu.gmall.common.bean.PageResultVo;
 import edu.sysu.gmall.common.bean.PageParamVo;
 import edu.sysu.gmall.pms.entity.SpuAttrValueEntity;
 
+import java.util.List;
+
 /**
  * spu属性值
  *
@@ -15,5 +17,7 @@ import edu.sysu.gmall.pms.entity.SpuAttrValueEntity;
 public interface SpuAttrValueService extends IService<SpuAttrValueEntity> {
 
     PageResultVo queryPage(PageParamVo paramVo);
+
+    List<SpuAttrValueEntity> queryAttrValueBySpuIdAndCid(Long spuId, Long cid);
 }
 

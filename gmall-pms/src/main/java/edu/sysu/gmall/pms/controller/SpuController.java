@@ -35,6 +35,13 @@ public class SpuController {
     @Autowired
     private SpuService spuService;
 
+    @PostMapping("page")
+    public ResponseVo<List<SpuEntity>> querySpuByPageSearch(@RequestBody PageParamVo paramVo){
+        PageResultVo pageResultVo = spuService.queryPage(paramVo);
+        List<?> list = pageResultVo.getList();
+        return ResponseVo.ok((List<SpuEntity>)list);
+    }
+
     @GetMapping("category/{categoryId}")
     public ResponseVo<PageResultVo> queryPageByCid(@PathVariable Long categoryId,PageParamVo paramVo){
         PageResultVo pageResultVo = spuService.queryPageByCid(categoryId,paramVo);

@@ -30,7 +30,7 @@ public class SkuServiceImpl extends ServiceImpl<SkuMapper, SkuEntity> implements
     }
 
     @Override
-    public List<SkuEntity> querySkusBySpu(String spuId) {
+    public List<SkuEntity> querySkusBySpu(Long spuId) {
         return this.list(new LambdaQueryWrapper<SkuEntity>().eq(SkuEntity::getSpuId,spuId));
     }
 

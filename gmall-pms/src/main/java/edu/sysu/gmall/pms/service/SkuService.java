@@ -19,6 +19,6 @@ public interface SkuService extends IService<SkuEntity> {
 
     PageResultVo queryPage(PageParamVo paramVo);
 
-    List<SkuEntity> querySkusBySpu(String spuId);
+    List<SkuEntity> querySkusBySpu(Long spuId);
 }
 

@@ -6,6 +6,7 @@ import edu.sysu.gmall.common.bean.PageParamVo;
 import edu.sysu.gmall.pms.entity.SpuEntity;
 import edu.sysu.gmall.pms.vo.SpuVo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,5 +23,7 @@ public interface SpuService extends IService<SpuEntity> {
     PageResultVo queryPageByCid(Long categoryId, PageParamVo paramVo);
 
     void bigSave(SpuVo spuVo);
+    void saveSpuDesc(SpuVo spuVo, Long spuId);
+
 }
 

@@ -30,6 +30,7 @@ import edu.sysu.gmall.common.bean.PageResultVo;
 import edu.sysu.gmall.common.bean.PageParamVo;
 
 import edu.sysu.gmall.pms.mapper.SpuMapper;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
@@ -80,13 +81,14 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     public void bigSave(SpuVo spuVo) {
         //1.保存spu相关信息
         //1.1 保存pms_spu表
-        Long spuId = saveSpu(spuVo);
+        Long spuId = this.saveSpu(spuVo);
 
         //1.2 保存pms_spu_desc表
         saveSpuDesc(spuVo, spuId);
 
         //1.3 保存pms_spu_attr_value表
         saveSpuAttrEntity(spuVo, spuId);
+
         //2.保存sku相关信息
         saveSKuVo(spuVo, spuId);
     }
@@ -146,7 +148,8 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         spuAttrValueService.saveBatch(spuAttrValueEntities);
     }
 
-    private void saveSpuDesc(SpuVo spuVo, Long spuId) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void saveSpuDesc(SpuVo spuVo, Long spuId) {
         SpuDescEntity spuDescEntity = new SpuDescEntity();
         spuDescEntity.setSpuId(spuId);
         List<String> spuImages = spuVo.getSpuImages();
@@ -156,6 +159,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         }
         spuDescMapper.insert(spuDescEntity);
     }
+
 
     private Long saveSpu(SpuVo spuVo) {
         SpuEntity spuEntity = new SpuEntity();
