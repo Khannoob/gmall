@@ -16,6 +16,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.nested.ParsedNested;
@@ -65,12 +66,15 @@ public class SearchService {
     }
 
     private SearchResponseVo parseResult(SearchResponse searchResponse,SearchResponseVo responseVo) {
-        SearchHit[] hitsHits = searchResponse.getHits().getHits();
+        SearchHits hits = searchResponse.getHits();
+        responseVo.setTotal(hits.getTotalHits());
+        SearchHit[] hitsHits = hits.getHits();
         //设置Goods _source 和 highlight覆盖
         if (hitsHits != null && hitsHits.length != 0) {
             responseVo.setGoodsList(Stream.of(hitsHits).map(hitsHit -> {
                 try {
                     String sourceAsString = hitsHit.getSourceAsString();
+
                     Goods goods = MAPPER.readValue(sourceAsString, Goods.class);
                     HighlightField highlightField = hitsHit.getHighlightFields().get("title");
                     String title = highlightField.getFragments()[0].toString();
