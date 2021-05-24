@@ -13,6 +13,7 @@ import edu.sysu.gmall.sms.api.SmsFeignClient;
 import edu.sysu.gmall.sms.vo.SkuSaleVo;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -63,22 +64,25 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         return new PageResultVo(page);
     }
     @Autowired
-    private SpuDescMapper spuDescMapper;
+    SpuDescMapper spuDescMapper;
     @Autowired
-    private SpuAttrValueService spuAttrValueService;
+    SpuAttrValueService spuAttrValueService;
     @Autowired
-    private SkuService skuService;
+    SkuService skuService;
     @Autowired
-    private SkuImagesService skuImagesService;
+    SkuImagesService skuImagesService;
     @Autowired
-    private SkuAttrValueService skuAttrValueService;
+    SkuAttrValueService skuAttrValueService;
     @Autowired
-    private SmsFeignClientApi smsFeignClientApi;
+    SmsFeignClientApi smsFeignClientApi;
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     @GlobalTransactional(rollbackFor = Exception.class)
 //    @Transactional(rollbackFor = Exception.class)
     @Override
     public void bigSave(SpuVo spuVo) {
+        long start = System.currentTimeMillis();
         //1.保存spu相关信息
         //1.1 保存pms_spu表
         Long spuId = this.saveSpu(spuVo);
@@ -91,6 +95,11 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
 
         //2.保存sku相关信息
         saveSKuVo(spuVo, spuId);
+
+
+        //通过RabbitMQ异步保存到ES数据库中
+        rabbitTemplate.convertAndSend("PMS_ITEM_EXCHANGE","item.insert",spuId);
+        System.out.println("花费时间:"+(System.currentTimeMillis()-start));
     }
 
     private void saveSKuVo(SpuVo spuVo, Long spuId) {
@@ -136,6 +145,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
                 smsFeignClientApi.saveSales(skuSaleVo);
             });
         }
+
     }
 
     private void saveSpuAttrEntity(SpuVo spuVo, Long spuId) {

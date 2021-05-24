@@ -17,6 +17,13 @@ import java.util.List;
  * @create: 2021-05-19 18:37
  */
 public interface GmallPmsApi {
+
+    @GetMapping("pms/spu/{id}")
+    public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id);
+
+    @GetMapping("pms/category/parent/{ParentId}")
+    public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable Long ParentId);
+
     @PostMapping("pms/spu/page")
     public ResponseVo<List<SpuEntity>> querySpuByPageSearch(PageParamVo paramVo);
 

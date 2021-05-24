@@ -41,8 +41,8 @@ class GmallSearchApplicationTests {
         //Spu 返回的是一个Page对象
         Integer pageNum = 1;
         Integer pageSize = 100;
-        do {
             ResponseVo<List<SpuEntity>> spuEntityResponseVo = gmallPmsClient.querySpuByPageSearch(new PageParamVo(pageNum, pageSize, null));
+        do {
             List<SpuEntity> spuEntities = spuEntityResponseVo.getData();
             if (!CollectionUtils.isEmpty(spuEntities)) {
                 spuEntities.forEach(spuEntity -> {
