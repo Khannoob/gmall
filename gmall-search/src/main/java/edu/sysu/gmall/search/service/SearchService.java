@@ -204,11 +204,11 @@ public class SearchService {
             case 2:
                 sourceBuilder.sort("price", SortOrder.ASC);
                 break;
-            case 3:
+            case 4:
                 sourceBuilder.sort("sales", SortOrder.DESC);
                 break;
-            case 4:
-                sourceBuilder.sort("createTIme", SortOrder.DESC);
+            case 3:
+                sourceBuilder.sort("createTime", SortOrder.DESC);
                 break;
             default:
                 break;

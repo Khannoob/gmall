@@ -65,10 +65,13 @@
             // },
             methods: {
                 loadSubCategories(category){
+                    if (category.subs==null || category.subs==undefined){
                     console.log("你触发了鼠标移动事件")
+                        //使用解构表达式
                     axios.get("http://api.gmall.com/index/cates/" + category.id).then(({data}) => {
                         category.subs = data.data;
                     })
+                    }
                 }
             }
         })

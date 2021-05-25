@@ -36,7 +36,11 @@ public class CategoryController {
     private CategoryService categoryService;
 
 
-
+    @GetMapping("subs/{pid}")
+    public ResponseVo<List<CategoryEntity>> queryL2CategoriesByPid(@PathVariable Long pid){
+        List<CategoryEntity> categoryEntities = categoryService.queryL2CategoriesByPid(pid);
+        return ResponseVo.ok(categoryEntities);
+    }
 
     @GetMapping("parent/{ParentId}")
     @ApiOperation("所有分类查询")

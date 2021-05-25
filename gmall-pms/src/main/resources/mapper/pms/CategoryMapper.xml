@@ -2,4 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sysu.gmall.pms.mapper.CategoryMapper">
 
+    <resultMap id="queryL2CategoriesByPidMap" type="edu.sysu.gmall.pms.entity.CategoryEntity" autoMapping="true">
+        <id column="id" property="id"/>
+        <collection property="subs" select="queryL2CategoriesByPid" column="id" autoMapping="true"/>
+    </resultMap>
+    <select id="queryL2CategoriesByPid" resultMap="queryL2CategoriesByPidMap">
+        SELECT * FROM pms_category WHERE parent_id = #{PID}
+    </select>
 </mapper>

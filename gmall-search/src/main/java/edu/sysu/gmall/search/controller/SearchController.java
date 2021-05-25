@@ -28,8 +28,6 @@ public class SearchController {
         SearchResponseVo searchResponseVo = searchService.search(searchParamVo);
         model.addAttribute("response",searchResponseVo);
         model.addAttribute("searchParam",searchParamVo);
-//        System.out.println(searchResponseVo.getTotal());
-//        System.out.println(searchResponseVo.getPageSize());
         return "search";
     }
 }

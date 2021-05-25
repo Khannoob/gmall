@@ -21,9 +21,6 @@ public interface GmallPmsApi {
     @GetMapping("pms/spu/{id}")
     public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id);
 
-    @GetMapping("pms/category/parent/{ParentId}")
-    public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable Long ParentId);
-
     @PostMapping("pms/spu/page")
     public ResponseVo<List<SpuEntity>> querySpuByPageSearch(PageParamVo paramVo);
 
@@ -32,6 +29,12 @@ public interface GmallPmsApi {
 
     @GetMapping("pms/brand/{id}")
     public ResponseVo<BrandEntity> queryBrandById(@PathVariable("id") Long id);
+
+    @GetMapping("pms/category/subs/{pid}")
+    public ResponseVo<List<CategoryEntity>> queryL2CategoriesByPid(@PathVariable Long pid);
+
+    @GetMapping("pms/category/parent/{ParentId}")
+    public ResponseVo<List<CategoryEntity>> queryCategoriesByPid(@PathVariable Long ParentId);
 
     @GetMapping("pms/category/{id}")
     public ResponseVo<CategoryEntity> queryCategoryById(@PathVariable("id") Long id);
