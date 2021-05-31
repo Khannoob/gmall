@@ -2,7 +2,7 @@ package edu.sysu.gmall.pms.controller;
 
 import java.util.List;
 
-import edu.sysu.gmall.pms.entity.AttrEntity;
+import edu.sysu.gmall.pms.vo.ItemGroupVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,14 @@ public class AttrGroupController {
     @Autowired
     private AttrGroupService attrGroupService;
 
+    @GetMapping("attr/value/{cid}")
+    public ResponseVo<List<ItemGroupVo>> queryGroupAttrsByCidSpuIdSkuId(
+            @PathVariable Long cid,
+            @RequestParam Long spuId,
+            @RequestParam Long skuId){
+        List<ItemGroupVo> itemGroupVos = attrGroupService.queryGroupAttrsByCidSpuIdSkuId(cid,spuId,skuId);
+        return ResponseVo.ok(itemGroupVos);
+    }
     @GetMapping("withattrs/{catId}")
     public ResponseVo<List<AttrGroupEntity>> queryAttrGroupAndAttrByCid(@PathVariable String catId){
         List<AttrGroupEntity> attrGroupEntities = attrGroupService.queryAttrGroupAndAttrByCid(catId);

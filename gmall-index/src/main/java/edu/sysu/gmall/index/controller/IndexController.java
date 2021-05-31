@@ -35,10 +35,43 @@ public class IndexController {
         List<CategoryEntity> categoryEntities = indexService.queryL2Categories(pid);
         return ResponseVo.ok(categoryEntities);
     }
+
     @GetMapping("index/test/lock")
     @ResponseBody
     public ResponseVo testLock(){
         indexService.testLock();
+        return ResponseVo.ok();
+    }
+
+    @GetMapping("index/test/read")
+    @ResponseBody
+    public ResponseVo testReadLock(){
+        String s = indexService.testReadLock();
+        return ResponseVo.ok(s);
+    }
+    @GetMapping("index/test/write")
+    @ResponseBody
+    public ResponseVo testWriteLock(){
+        String s = indexService.testWriteLock();
+        return ResponseVo.ok(s);
+    }
+
+    @GetMapping("index/test/semaphore")
+    @ResponseBody
+    public ResponseVo testSemaphore(){
+        indexService.testSemaphore();
+        return ResponseVo.ok();
+    }
+    @GetMapping("index/test/latch")
+    @ResponseBody
+    public ResponseVo testLatch(){
+        indexService.testLatch();
+        return ResponseVo.ok("班长锁门..........");
+    }
+    @GetMapping("index/test/countDown")
+    @ResponseBody
+    public ResponseVo testCountDown(){
+        indexService.testCountDown();
         return ResponseVo.ok();
     }
 }

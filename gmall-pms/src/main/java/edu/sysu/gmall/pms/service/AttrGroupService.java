@@ -6,6 +6,7 @@ import edu.sysu.gmall.common.bean.PageParamVo;
 import edu.sysu.gmall.common.bean.ResponseVo;
 import edu.sysu.gmall.pms.entity.AttrEntity;
 import edu.sysu.gmall.pms.entity.AttrGroupEntity;
+import edu.sysu.gmall.pms.vo.ItemGroupVo;
 
 import java.util.List;
 import java.util.Map;
@@ -24,5 +25,7 @@ public interface AttrGroupService extends IService<AttrGroupEntity> {
     List<AttrGroupEntity> queryAttrGroupByCid(Long cid);
 
     List<AttrGroupEntity> queryAttrGroupAndAttrByCid(String catId);
+
+    List<ItemGroupVo> queryGroupAttrsByCidSpuIdSkuId(Long cid, Long spuId, Long skuId);
 }
 

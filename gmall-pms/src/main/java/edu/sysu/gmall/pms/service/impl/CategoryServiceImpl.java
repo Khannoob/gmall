@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -53,15 +54,28 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
 
     @Override
     public List<CategoryEntity> queryL2CategoriesByPid(Long pid) {
-        Object o = redisTemplate.opsForValue().get(KEY_PREFIX + pid);
-        if (o != null) {
-            return (List<CategoryEntity>)o;
-        }
         List<CategoryEntity> categories = baseMapper.queryL2CategoriesByPid(pid);
-        if (CollectionUtils.isEmpty(categories)){
-            redisTemplate.opsForValue().set(KEY_PREFIX + pid, categories, 5, TimeUnit.MINUTES);
-        }
-        redisTemplate.opsForValue().set(KEY_PREFIX+pid, categories, 60+ RandomUtils.nextInt(1,30), TimeUnit.DAYS);
         return categories;
+    }
+
+    @Override
+    public List<CategoryEntity> queryCatesL123ByL3Cid(Long cid) {
+        ArrayList<CategoryEntity> categoryEntities = new ArrayList<>();
+        //三级分类
+        CategoryEntity categoryEntity3 = baseMapper.selectById(cid);
+
+        if (categoryEntity3 != null) {
+            //二级分类
+            CategoryEntity categoryEntityL2 = baseMapper.selectById(categoryEntity3.getParentId());
+
+            if (categoryEntityL2 != null) {
+                //一级分类
+                CategoryEntity categoryEntityL1 = baseMapper.selectById(categoryEntityL2.getParentId());
+                categoryEntities.add(categoryEntityL1);
+            }
+            categoryEntities.add(categoryEntityL2);
+        }
+        categoryEntities.add(categoryEntity3);
+        return categoryEntities;
     }
 }

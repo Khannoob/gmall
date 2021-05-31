@@ -28,6 +28,7 @@ public class SpuAttrValueController {
     @Autowired
     private SpuAttrValueService spuAttrValueService;
 
+
     @GetMapping("spu/{spuId}")
     public ResponseVo<List<SpuAttrValueEntity>> queryAttrValueBySpuIdAndCid(
             @PathVariable Long spuId,

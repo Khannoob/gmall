@@ -1,7 +1,9 @@
 package edu.sysu.gmall.pms.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import edu.sysu.gmall.pms.vo.SaleAttrValueVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,24 @@ public class SkuAttrValueController {
 
     @Autowired
     private SkuAttrValueService skuAttrValueService;
+
+    @GetMapping("mapping/{spuId}")
+    public ResponseVo<String> queryMappingBySpuId(@PathVariable Long spuId){
+        String mapping = skuAttrValueService.queryMappingBySpuId(spuId);
+        return ResponseVo.ok(mapping);
+    }
+
+    @GetMapping("item/sku/{skuId}")
+    public ResponseVo<Map<Long,String>> querySaleAttrBySkuId(@PathVariable Long skuId){
+        Map<Long,String> saleAttr = skuAttrValueService.querySaleAttrBySkuId(skuId);
+        return ResponseVo.ok(saleAttr);
+    }
+
+    @GetMapping("all/{spuId}")
+    public ResponseVo<List<SaleAttrValueVo>> querySaleAttrsBySpuId(@PathVariable Long spuId){
+        List<SaleAttrValueVo> saleAttrValueVos = skuAttrValueService.querySaleAttrsBySpuId(spuId);
+        return ResponseVo.ok(saleAttrValueVos);
+    }
 
     @GetMapping("sku/{skuId}")
     public ResponseVo<List<SkuAttrValueEntity>> querySkuAttrValueEntityBySkuIdAndCid(

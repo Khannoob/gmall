@@ -19,5 +19,7 @@ public interface SpuAttrValueService extends IService<SpuAttrValueEntity> {
     PageResultVo queryPage(PageParamVo paramVo);
 
     List<SpuAttrValueEntity> queryAttrValueBySpuIdAndCid(Long spuId, Long cid);
+
+
 }
 

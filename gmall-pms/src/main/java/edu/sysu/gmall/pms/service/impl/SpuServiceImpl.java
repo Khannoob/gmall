@@ -1,27 +1,23 @@
 package edu.sysu.gmall.pms.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import edu.sysu.gmall.pms.entity.*;
-import edu.sysu.gmall.pms.feign.SmsFeignClientApi;
+import edu.sysu.gmall.pms.feign.GmallSmsClient;
 import edu.sysu.gmall.pms.mapper.SpuDescMapper;
 import edu.sysu.gmall.pms.service.*;
 import edu.sysu.gmall.pms.vo.SkuVo;
 import edu.sysu.gmall.pms.vo.SpuAttrVo;
 import edu.sysu.gmall.pms.vo.SpuVo;
-import edu.sysu.gmall.sms.api.SmsFeignClient;
 import edu.sysu.gmall.sms.vo.SkuSaleVo;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -74,7 +70,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     @Autowired
     SkuAttrValueService skuAttrValueService;
     @Autowired
-    SmsFeignClientApi smsFeignClientApi;
+    GmallSmsClient smsFeignClientApi;
     @Autowired
     RabbitTemplate rabbitTemplate;
 
