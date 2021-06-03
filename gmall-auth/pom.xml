@@ -6,18 +6,18 @@
         <groupId>edu.sysu</groupId>
         <artifactId>gmall</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>edu.sysu</groupId>
-    <artifactId>gmall-ums</artifactId>
+    <artifactId>gmall-auth</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>gmall-ums</name>
-    <description>用户模块</description>
+    <name>gmall-auth</name>
+    <description>授权中心</description>
 
     <dependencies>
         <dependency>
-            <artifactId>gmall</artifactId>
             <groupId>edu.sysu</groupId>
+            <artifactId>gmall-ums-interface</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -26,8 +26,8 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -38,12 +38,8 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -59,21 +55,12 @@
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>edu.sysu</groupId>
-            <artifactId>gmall-ums-interface</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
+
 
     <build>
         <plugins>

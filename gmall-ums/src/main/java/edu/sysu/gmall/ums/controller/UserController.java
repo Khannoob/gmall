@@ -2,6 +2,7 @@ package edu.sysu.gmall.ums.controller;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.extension.api.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,37 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("query")
+    public ResponseVo<UserEntity> queryUser(@RequestParam String loginName,@RequestParam String password){
+        UserEntity user = userService.queryUser(loginName,password);
+
+        return ResponseVo.ok(user);
+    }
+
+    @PostMapping("register")
+    public ResponseVo register(UserEntity userEntity,@RequestParam String code){
+        userService.register(userEntity,code);
+        return ResponseVo.ok();
+    }
+
+    @PostMapping("code")
+    public ResponseVo generateCode(String phone) {
+
+        return ResponseVo.ok();
+    }
+
+    @GetMapping("check/{data}/{type}")
+    public ResponseVo<Boolean> checkUserInfo(@PathVariable String data, @PathVariable Integer type) {
+        Boolean b = userService.checkUserInfo(data, type);
+        return ResponseVo.ok(b);
+    }
+
     /**
      * 列表
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryUserByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryUserByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = userService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -51,8 +77,8 @@ public class UserController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<UserEntity> queryUserById(@PathVariable("id") Long id){
-		UserEntity user = userService.getById(id);
+    public ResponseVo<UserEntity> queryUserById(@PathVariable("id") Long id) {
+        UserEntity user = userService.getById(id);
 
         return ResponseVo.ok(user);
     }
@@ -62,8 +88,8 @@ public class UserController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody UserEntity user){
-		userService.save(user);
+    public ResponseVo<Object> save(@RequestBody UserEntity user) {
+        userService.save(user);
 
         return ResponseVo.ok();
     }
@@ -73,8 +99,8 @@ public class UserController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody UserEntity user){
-		userService.updateById(user);
+    public ResponseVo update(@RequestBody UserEntity user) {
+        userService.updateById(user);
 
         return ResponseVo.ok();
     }
@@ -84,8 +110,8 @@ public class UserController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		userService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        userService.removeByIds(ids);
 
         return ResponseVo.ok();
     }
