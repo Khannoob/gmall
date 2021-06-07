@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import edu.sysu.gmall.common.bean.PageResultVo;
 import edu.sysu.gmall.common.bean.PageParamVo;
 import edu.sysu.gmall.wms.entity.WareSkuEntity;
+import edu.sysu.gmall.wms.vo.SkuLockVo;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * 商品库存
@@ -17,5 +18,7 @@ import java.util.Map;
 public interface WareSkuService extends IService<WareSkuEntity> {
 
     PageResultVo queryPage(PageParamVo paramVo);
+
+    List<SkuLockVo> checkLock(String orderToken, List<SkuLockVo> lockVos);
 }
 

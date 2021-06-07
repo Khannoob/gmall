@@ -1,7 +1,7 @@
 package edu.sysu.gmall.auth.service;
 
 import edu.sysu.gmall.auth.config.JwtProperties;
-import edu.sysu.gmall.auth.exception.UserException;
+import edu.sysu.gmall.common.exception.UserException;
 import edu.sysu.gmall.auth.feign.GmallUmsClient;
 import edu.sysu.gmall.common.utils.CookieUtils;
 import edu.sysu.gmall.common.utils.IpUtil;

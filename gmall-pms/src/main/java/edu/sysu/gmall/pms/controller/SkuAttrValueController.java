@@ -54,6 +54,12 @@ public class SkuAttrValueController {
         return ResponseVo.ok(saleAttrValueVos);
     }
 
+    @GetMapping("sku/list/{skuId}")
+    public ResponseVo<List<SkuAttrValueEntity>> querySkuAttrValueEntityListBySkuId(@PathVariable Long skuId) {
+        List<SkuAttrValueEntity> skuAttrValueEntities = skuAttrValueService.querySkuAttrValueEntityListBySkuId(skuId);
+        return ResponseVo.ok(skuAttrValueEntities);
+    }
+
     @GetMapping("sku/{skuId}")
     public ResponseVo<List<SkuAttrValueEntity>> querySkuAttrValueEntityBySkuIdAndCid(
             @PathVariable Long skuId,

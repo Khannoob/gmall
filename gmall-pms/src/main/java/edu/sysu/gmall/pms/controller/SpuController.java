@@ -5,6 +5,7 @@ import java.util.List;
 import edu.sysu.gmall.pms.vo.SpuVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -81,7 +82,8 @@ public class SpuController {
 
         return ResponseVo.ok();
     }
-
+    @Autowired
+    RabbitTemplate rabbitTemplate;
     /**
      * 修改
      */
@@ -90,6 +92,8 @@ public class SpuController {
     public ResponseVo update(@RequestBody SpuEntity spu){
 		spuService.updateById(spu);
 
+        System.out.println("rabbitTemplate = " + rabbitTemplate);
+        rabbitTemplate.convertAndSend("PMS_ITEM_EXCHANGE","item.update",spu.getId());
         return ResponseVo.ok();
     }
 

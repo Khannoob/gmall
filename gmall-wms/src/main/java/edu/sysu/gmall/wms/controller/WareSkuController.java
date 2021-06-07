@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
+import edu.sysu.gmall.wms.vo.SkuLockVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,13 @@ public class WareSkuController {
 
     @Autowired
     private WareSkuService wareSkuService;
+
+    @PostMapping("check/lock/{orderToken}")
+    public ResponseVo<List<SkuLockVo>> checkLock(@PathVariable String orderToken,@RequestBody  List<SkuLockVo> lockVos){
+        //全部锁定成功返回null  一旦有一个锁定失败 全部解锁 并且返回锁定的情况
+        List<SkuLockVo> skuLockVos = wareSkuService.checkLock(orderToken,lockVos);
+        return ResponseVo.ok(skuLockVos);
+    }
 
     @GetMapping("sku/{skuId}")
     public ResponseVo<List<WareSkuEntity>> queryWareSkuBySid(@PathVariable Long skuId){

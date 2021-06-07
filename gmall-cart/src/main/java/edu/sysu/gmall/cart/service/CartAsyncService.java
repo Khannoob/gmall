@@ -19,20 +19,26 @@ public class CartAsyncService {
     CartMapper cartMapper;
 
     @Async
-    public void updateCart(Cart cart, String userId, String skuId) {
+    public void updateCart(String userId, Cart cart, String skuId) {
+
         cartMapper.update(cart, new UpdateWrapper<Cart>().eq("user_id", userId).eq("sku_id", skuId));
     }
 
     @Async
-    public void insertCart(Cart cart) {
+    public void insertCart(String userId, Cart cart) {
+//        if (1 + 1 == 2) {
+//            throw new CartException("我故意抛的异常,嘻嘻嘻嘻~");
+//        }
         cartMapper.insert(cart);
     }
+
     @Async
-    public void deleteCartsByUserId(String userId){
+    public void deleteCartsByUserId(String userId) {
         cartMapper.delete(new QueryWrapper<Cart>().eq("user_id", userId));
     }
+
     @Async
-    public void deleteCartBySkuId(String userId,Long skuId){
+    public void deleteCartBySkuId(String userId, Long skuId) {
         cartMapper.delete(new QueryWrapper<Cart>().eq("user_id", userId).eq("sku_id", skuId));
     }
 }

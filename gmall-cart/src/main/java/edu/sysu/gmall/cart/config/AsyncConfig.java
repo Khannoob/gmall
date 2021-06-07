@@ -1,6 +1,7 @@
 package edu.sysu.gmall.cart.config;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 
@@ -11,9 +12,11 @@ import org.springframework.scheduling.annotation.AsyncConfigurer;
  */
 @Configuration
 public class AsyncConfig implements AsyncConfigurer {
+    @Autowired
+    AsyncExceptionHandler asyncExceptionHandler;
 
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-        return new AsyncExceptionHandler();
+        return asyncExceptionHandler;
     }
 }

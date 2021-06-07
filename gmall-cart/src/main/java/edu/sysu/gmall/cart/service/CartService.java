@@ -1,16 +1,14 @@
 package edu.sysu.gmall.cart.service;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import edu.sysu.gmall.cart.exception.CartException;
+import edu.sysu.gmall.common.exception.CartException;
 import edu.sysu.gmall.cart.feign.GmallPmsClient;
 import edu.sysu.gmall.cart.feign.GmallSmsClient;
 import edu.sysu.gmall.cart.feign.GmallWmsClient;
 import edu.sysu.gmall.cart.interceptor.LoginInterceptor;
-import edu.sysu.gmall.cart.mapper.CartMapper;
 import edu.sysu.gmall.cart.pojo.Cart;
 import edu.sysu.gmall.cart.pojo.UserInfo;
+import edu.sysu.gmall.common.exception.OrderException;
 import edu.sysu.gmall.pms.entity.SkuEntity;
 import edu.sysu.gmall.sms.vo.ItemSalesVo;
 import edu.sysu.gmall.wms.entity.WareSkuEntity;
@@ -24,6 +22,7 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @program: gmall
@@ -47,6 +46,7 @@ public class CartService {
     CartAsyncService cartAsyncService;
 
     private static final String KEY_PREFIX = "cart:info:";
+    private static final String PRICE_PREFIX = "cart:price:";
 
     public void addCart(Cart cart) {
         //判断是已登录&未登陆 设置到外层Key
@@ -60,7 +60,7 @@ public class CartService {
             cart = (Cart) hashOps.get(skuId);
             cart.setCount(cart.getCount().add(newCount));
 
-            cartAsyncService.updateCart(cart, userId, skuId);
+            cartAsyncService.updateCart(userId, cart, skuId);
 //            cartMapper.update(cart, new UpdateWrapper<Cart>().eq("user_id", userId).eq("sku_id", skuId));
         } else {
             //没有就新增到redis
@@ -71,6 +71,7 @@ public class CartService {
             SkuEntity skuEntity = gmallPmsClient.querySkuById(Long.parseLong(skuId)).getData();
             if (skuEntity != null) {
                 cart.setPrice(skuEntity.getPrice());
+                cart.setCurrentPrice(skuEntity.getPrice());
                 cart.setDefaultImage(skuEntity.getDefaultImage());
                 cart.setTitle(skuEntity.getTitle());
             }
@@ -88,10 +89,11 @@ public class CartService {
                     return wareSkuEntity.getStock() > wareSkuEntity.getStockLocked();
                 }));
 
-            cartAsyncService.insertCart(cart);
+            cartAsyncService.insertCart(userId, cart);
 //            cartMapper.insert(cart);
         }
         hashOps.put(skuId, cart);
+        redisTemplate.opsForValue().set(PRICE_PREFIX + cart.getSkuId(), cart.getCurrentPrice());
     }
 
     private String getUserId() {
@@ -117,16 +119,21 @@ public class CartService {
         String userKey = userInfo.getUserKey();
 
         BoundHashOperations unLoginOps = redisTemplate.boundHashOps(KEY_PREFIX + userKey);
-        List unLoginCarts = unLoginOps.values();
+        List<Object> unLoginCarts = unLoginOps.values();
         if (StringUtils.isBlank(userId)) {
-            return unLoginCarts;
+            if (CollectionUtils.isEmpty(unLoginCarts)) {
+                return null;
+            }
+            return unLoginCarts.stream().map(o -> getCurrentPrice((Cart) o)).collect(Collectors.toList());
         }
         //2.是已登录状态 先查未登录的购物车是否有货
         BoundHashOperations loginOps = redisTemplate.boundHashOps(KEY_PREFIX + userId);
-        List loginCarts = loginOps.values();
-        //2.1.无货直接返回已登录的购物车
+        List<Object> loginCarts = loginOps.values();
+        //2.1.无货直接返回已登录的购物车 要返回查询最新价格
         if (CollectionUtils.isEmpty(unLoginCarts)) {
-            return loginCarts;
+            if (CollectionUtils.isEmpty(loginCarts))
+                return null;
+            return loginCarts.stream().map(o -> getCurrentPrice((Cart) o)).collect(Collectors.toList());
         }
 
         //2.2.有货 要把未登录购物车添加到已登录购物车 并删除未登录购物车
@@ -139,10 +146,10 @@ public class CartService {
                 //有就修改数量
                 cart = (Cart) loginOps.get(cart.getSkuId().toString());
                 cart.setCount(cart.getCount().add(newCount));
-                cartAsyncService.updateCart(cart, userId, cart.getSkuId().toString());
+                cartAsyncService.updateCart(userId, cart, cart.getSkuId().toString());
             } else {
                 cart.setUserId(userId);
-                cartAsyncService.insertCart(cart);
+                cartAsyncService.insertCart(userId, cart);
             }
             loginOps.put(cart.getSkuId().toString(), cart);
 
@@ -151,9 +158,17 @@ public class CartService {
         redisTemplate.delete(KEY_PREFIX + userKey);
         cartAsyncService.deleteCartsByUserId(userKey);
         //2.3再查redis中的已登录购物车
-        return loginOps.values();
+        List<Object> allLoginCarts = loginOps.values();
+        if (CollectionUtils.isEmpty(allLoginCarts))
+            return null;
+        return allLoginCarts.stream().map(o -> getCurrentPrice((Cart) o)).collect(Collectors.toList());
     }
 
+    private Cart getCurrentPrice(Cart o) {
+        Cart cart = o;
+        cart.setCurrentPrice(new BigDecimal(redisTemplate.opsForValue().get(PRICE_PREFIX + cart.getSkuId()).toString()));
+        return cart;
+    }
 
     public void updateNum(Cart cart) {
         String userId = getUserId();
@@ -166,7 +181,7 @@ public class CartService {
         cart = (Cart) hashOps.get(skuId.toString());
         cart.setCount(count);
         hashOps.put(skuId.toString(), cart);
-        cartAsyncService.updateCart(cart, userId, skuId.toString());
+        cartAsyncService.updateCart(userId, cart, skuId.toString());
     }
 
     public void updateStatus(Cart cart) {
@@ -180,7 +195,7 @@ public class CartService {
         cart = (Cart) hashOps.get(skuId.toString());
         cart.setCheck(check);
         hashOps.put(skuId.toString(), cart);
-        cartAsyncService.updateCart(cart, userId, skuId.toString());
+        cartAsyncService.updateCart(userId, cart, skuId.toString());
     }
 
     public void deleteCart(Long skuId) {
@@ -191,5 +206,16 @@ public class CartService {
         }
         hashOps.delete(skuId.toString());
         cartAsyncService.deleteCartBySkuId(userId, skuId);
+    }
+
+    public List<Cart> queryCheckedCartByUserId(String userId) {
+
+        BoundHashOperations hashOps = redisTemplate.boundHashOps(KEY_PREFIX + userId);
+        List<Object> values = hashOps.values();
+        List<Cart> carts = values.stream().map(o -> (Cart) o).filter(Cart::getCheck).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(carts)) {
+            throw new OrderException("没有选中购物车商品异常!");
+        }
+        return carts;
     }
 }

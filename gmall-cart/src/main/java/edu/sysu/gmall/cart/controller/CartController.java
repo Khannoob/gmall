@@ -1,17 +1,13 @@
 package edu.sysu.gmall.cart.controller;
 
-import edu.sysu.gmall.cart.exception.CartException;
+import edu.sysu.gmall.common.exception.CartException;
 import edu.sysu.gmall.cart.pojo.Cart;
-import edu.sysu.gmall.cart.pojo.UserInfo;
 import edu.sysu.gmall.cart.service.CartService;
 import edu.sysu.gmall.common.bean.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,6 +21,14 @@ import java.util.List;
 public class CartController {
     @Autowired
     CartService cartService;
+
+    @GetMapping("query/check/{userId}")
+    @ResponseBody
+    public ResponseVo<List<Cart> > queryCheckedCartByUserId(@PathVariable String userId) {
+        List<Cart> carts = cartService.queryCheckedCartByUserId(userId);
+
+        return ResponseVo.ok(carts);
+    }
 
     @GetMapping
     public String toAddCart(Cart cart) {
@@ -52,20 +56,21 @@ public class CartController {
 
     @PostMapping("updateNum")
     @ResponseBody
-    public ResponseVo updateNum(@RequestBody Cart cart){
+    public ResponseVo updateNum(@RequestBody Cart cart) {
         cartService.updateNum(cart);
         return ResponseVo.ok();
     }
 
     @PostMapping("updateStatus")
     @ResponseBody
-    public ResponseVo updateStatus(@RequestBody Cart cart){
+    public ResponseVo updateStatus(@RequestBody Cart cart) {
         cartService.updateStatus(cart);
         return ResponseVo.ok();
     }
+
     @PostMapping("deleteCart")
     @ResponseBody
-    public ResponseVo deleteCart(Long skuId){
+    public ResponseVo deleteCart(Long skuId) {
         cartService.deleteCart(skuId);
         return ResponseVo.ok();
     }

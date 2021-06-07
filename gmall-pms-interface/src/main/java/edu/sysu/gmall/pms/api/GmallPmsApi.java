@@ -5,6 +5,7 @@ import edu.sysu.gmall.common.bean.ResponseVo;
 import edu.sysu.gmall.pms.entity.*;
 import edu.sysu.gmall.pms.vo.ItemGroupVo;
 import edu.sysu.gmall.pms.vo.SaleAttrValueVo;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,6 +62,9 @@ public interface GmallPmsApi {
 
     @GetMapping("/pms/skuattrvalue/mapping/{spuId}")
     public ResponseVo<String> queryMappingBySpuId(@PathVariable Long spuId);
+
+    @GetMapping("/pms/skuattrvalue/sku/list/{skuId}")
+    public ResponseVo<List<SkuAttrValueEntity>> querySkuAttrValueEntityListBySkuId(@PathVariable Long skuId);
 
     @GetMapping("pms/skuimages/sku/{skuId}")
     public ResponseVo<List<SkuImagesEntity>> querySkuImagesBySKuId(@PathVariable Long skuId);

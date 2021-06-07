@@ -97,11 +97,17 @@ public class SkuAttrValueServiceImpl extends ServiceImpl<SkuAttrValueMapper, Sku
             return null;
         }
         List<Long> skuIds = skuEntities.stream().map(SkuEntity::getId).collect(Collectors.toList());
-        List<Map<String,Object>> maps = baseMapper.queryMappingBySpuId(skuIds);
-        if (CollectionUtils.isEmpty(maps)){
+        List<Map<String, Object>> maps = baseMapper.queryMappingBySpuId(skuIds);
+        if (CollectionUtils.isEmpty(maps)) {
             return null;
         }
-        Map<String, Long> mapping = maps.stream().collect(Collectors.toMap(map -> map.get("attrValues").toString(), map -> (long)map.get("sku_id")));
+        Map<String, Long> mapping = maps.stream().collect(Collectors.toMap(map -> map.get("attrValues").toString(), map -> (long) map.get("sku_id")));
         return JSON.toJSONString(mapping);
+    }
+
+    @Override
+    public List<SkuAttrValueEntity> querySkuAttrValueEntityListBySkuId(Long skuId) {
+        List<SkuAttrValueEntity> skuAttrValueEntities = baseMapper.selectList(new QueryWrapper<SkuAttrValueEntity>().eq("sku_id", skuId));
+        return skuAttrValueEntities;
     }
 }
