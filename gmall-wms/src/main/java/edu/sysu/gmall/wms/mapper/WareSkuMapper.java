@@ -22,4 +22,6 @@ public interface WareSkuMapper extends BaseMapper<WareSkuEntity> {
     int lockWare(@Param("id") Long id,@Param("count") Integer count);
 
     int unlockWare(@Param("id") Long id, @Param("count") Integer count);
+
+    int minus(@Param("id") Long id, @Param("count") Integer count);
 }

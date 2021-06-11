@@ -42,6 +42,7 @@ public class ItemService {
     @Autowired
     TemplateEngine templateEngine;
 
+
     public ItemVo itemDetail(Long skuId) {
         ItemVo itemVo = new ItemVo();
         CompletableFuture<SkuEntity> skuFuture = CompletableFuture.supplyAsync(() -> {
@@ -63,22 +64,22 @@ public class ItemService {
 
 //        1.查123级分类 V 2
         CompletableFuture<Void> categoryFuture = skuFuture.thenAcceptAsync(skuEntity -> {
-                    Long categoryId = skuEntity.getCategoryId();
-                    List<CategoryEntity> categoryEntities = gmallPmsApi.queryCatesL123ByL3Cid(categoryId).getData();
-                    if (!CollectionUtils.isEmpty(categoryEntities))
-                        itemVo.setCategoryEntities(categoryEntities);
-                }, threadPoolExecutor);
+            Long categoryId = skuEntity.getCategoryId();
+            List<CategoryEntity> categoryEntities = gmallPmsApi.queryCatesL123ByL3Cid(categoryId).getData();
+            if (!CollectionUtils.isEmpty(categoryEntities))
+                itemVo.setCategoryEntities(categoryEntities);
+        }, threadPoolExecutor);
 
 
 //        2.查品牌 V 2
         CompletableFuture<Void> brandFuture = skuFuture.thenAcceptAsync(skuEntity -> {
-                    Long brandId = skuEntity.getBrandId();
-                    BrandEntity brandEntity = gmallPmsApi.queryBrandById(brandId).getData();
-                    if (brandEntity != null) {
-                        itemVo.setBrandId(brandId);
-                        itemVo.setBrandName(brandEntity.getName());
-                    }
-                }, threadPoolExecutor);
+            Long brandId = skuEntity.getBrandId();
+            BrandEntity brandEntity = gmallPmsApi.queryBrandById(brandId).getData();
+            if (brandEntity != null) {
+                itemVo.setBrandId(brandId);
+                itemVo.setBrandName(brandEntity.getName());
+            }
+        }, threadPoolExecutor);
 
 //        3.查Spu信息 V 2 拿到spuId才能查哈
         CompletableFuture<Void> spuFuture = skuFuture.thenAcceptAsync(skuEntity -> {
@@ -156,9 +157,9 @@ public class ItemService {
                 itemVo.setGroups(itemGroupVos);
         }, threadPoolExecutor);
 
-        CompletableFuture.allOf(categoryFuture,brandFuture,spuFuture,smsFuture,
-                wmsFuture,saleAttrsFuture,skuImagesFuture,saleAttrFuture,mappingFuture,spuDescFuture,groupFuture).join();
-        threadPoolExecutor.execute(()->{
+        CompletableFuture.allOf(categoryFuture, brandFuture, spuFuture, smsFuture,
+                wmsFuture, saleAttrsFuture, skuImagesFuture, saleAttrFuture, mappingFuture, spuDescFuture, groupFuture).join();
+        threadPoolExecutor.execute(() -> {
             generateHtml(itemVo);
         });
         return itemVo;
@@ -242,13 +243,13 @@ public class ItemService {
         return itemVo;
     }
 
-    public void generateHtml(ItemVo itemVo){
-        try (PrintWriter writer = new PrintWriter(new File("D:/Project/html/"+itemVo.getSkuId()+".html"))) {
+    public void generateHtml(ItemVo itemVo) {
+        try (PrintWriter writer = new PrintWriter(new File("D:/Project/html/" + itemVo.getSkuId() + ".html"))) {
             Context context = new Context();
             //传递数据
             context.setVariable("itemVo", itemVo);
             templateEngine.process("item", context, writer);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

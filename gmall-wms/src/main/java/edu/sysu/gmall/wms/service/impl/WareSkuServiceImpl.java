@@ -4,6 +4,7 @@ import edu.sysu.gmall.common.exception.OrderException;
 import edu.sysu.gmall.wms.vo.SkuLockVo;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSkuEntity
     RedissonClient redissonClient;
     @Autowired
     RedisTemplate redisTemplate;
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     private static final String LOCK_PREFIX = "stock:lock:";
     private static final String KEY_PREFIX = "stock:info:";
@@ -63,6 +66,8 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSkuEntity
         }
         //3.都满足则只返回null 但是要redis缓存下所有以锁定的货物wareId 关单之后会用到
         redisTemplate.opsForValue().set(KEY_PREFIX + orderToken, lockVos);
+        //4.设置超时自动解锁库存 防止关单失败导致库存死锁 发送消息到延时队列
+        rabbitTemplate.convertAndSend("ORDER_EXCHANGE", "stock.ttl", orderToken);
         return null;
     }
 

@@ -32,6 +32,7 @@ public class OrderEntity implements Serializable {
 	/**
 	 * 订单号
 	 */
+
 	private String orderSn;
 	/**
 	 * 使用的优惠券

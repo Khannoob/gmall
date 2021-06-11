@@ -51,6 +51,7 @@ public class CartService {
     public void addCart(Cart cart) {
         //判断是已登录&未登陆 设置到外层Key
         String userId = getUserId();
+        //购物车在redis的数据模型 Hash <userId,<skuId,skuId对应的Cart>>
         //查询数据库redis是否有该数据 有就修改数量 无就新增记录(新增记录要先查skuId对应的信息)
         String skuId = cart.getSkuId().toString();
         BigDecimal newCount = cart.getCount();

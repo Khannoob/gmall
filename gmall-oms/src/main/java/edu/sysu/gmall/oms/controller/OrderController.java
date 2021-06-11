@@ -2,6 +2,7 @@ package edu.sysu.gmall.oms.controller;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import edu.sysu.gmall.oms.vo.OrderSubmitVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +34,14 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @GetMapping("sn/{orderToken}")
+    public ResponseVo<OrderEntity> queryOrderByOrderSn(@PathVariable String orderToken){
+        System.out.println("orderToken = " + orderToken);
+        OrderEntity orderEntity = orderService.getOne(new QueryWrapper<OrderEntity>().eq("order_sn", orderToken));
+        System.out.println(orderEntity);
+        return ResponseVo.ok(orderEntity);
+    }
 
     @PostMapping("{userId}")
     public ResponseVo<OrderEntity> saveOrder(@RequestBody OrderSubmitVo orderSubmitVO, @PathVariable("userId")Long userId){

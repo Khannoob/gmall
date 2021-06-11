@@ -30,17 +30,12 @@ public class OrderController {
         return "trade";
     }
 
-//    @GetMapping("confirm")
-//    @ResponseBody
-//    public OrderConfirmVo confirmOrderBody() {
-//        OrderConfirmVo confirmVo = orderService.confirmOrder();
-//        return confirmVo;
-//    }
 
     @PostMapping("submit")
     @ResponseBody
     public ResponseVo submitOrder(@RequestBody OrderSubmitVo orderSubmitVo) {
         orderService.submitOrder(orderSubmitVo);
-        return ResponseVo.ok();
+
+        return ResponseVo.ok(orderSubmitVo.getOrderToken());
     }
 }
